@@ -1,5 +1,5 @@
-import { CsvWriter } from '../interfaces/CsvWriter'
 import { createWriteStream } from 'fs';
+import { CsvWriter } from '../interfaces/CsvWriter'
 
 
 export class StreamCsvWriter extends CsvWriter  {

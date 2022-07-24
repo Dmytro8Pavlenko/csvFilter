@@ -52,8 +52,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.StreamCsvWriter = void 0;
-var CsvWriter_1 = require("../interfaces/CsvWriter");
 var fs_1 = require("fs");
+var CsvWriter_1 = require("../interfaces/CsvWriter");
 var StreamCsvWriter = /** @class */ (function (_super) {
     __extends(StreamCsvWriter, _super);
     function StreamCsvWriter() {

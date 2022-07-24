@@ -1,4 +1,19 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -36,8 +51,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var CsvReader_1 = require("./interfaces/CsvReader");
 var CsvGenerator_1 = require("./modules/CsvGenerator");
 var StreamCsvWriter_1 = require("./modules/StreamCsvWriter");
+var ScreamCsvReader_1 = require("./modules/ScreamCsvReader");
 var scheme = {
     'testField1': [['aa', 'bb', 'cc'], ['zz', 'xx', 'cc'], ['qq', 'ww', 'ee']],
     'testField2': [['aa', 'bb', 'cc'], ['zz', 'xx', 'cc'], ['qq', 'ww', 'ee']],
@@ -46,12 +63,47 @@ var scheme = {
 };
 var randomCSVContentGenerator = new CsvGenerator_1.RandomCSVContentGenerator(scheme);
 var streamCsvWriter = new StreamCsvWriter_1.StreamCsvWriter('../csv/test.csv', randomCSVContentGenerator);
+var streamCsvReader = new ScreamCsvReader_1.StreamCsvReader('../csv/test.csv');
+var CustomFilter1 = /** @class */ (function (_super) {
+    __extends(CustomFilter1, _super);
+    function CustomFilter1() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    CustomFilter1.prototype.check = function (record) {
+        return record.testField1 === 'aazzqq' && record.testField2 === 'ccccee';
+    };
+    return CustomFilter1;
+}(CsvReader_1.Filter));
+var CustomFilter2 = /** @class */ (function (_super) {
+    __extends(CustomFilter2, _super);
+    function CustomFilter2() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    CustomFilter2.prototype.check = function (record) {
+        return record.testField1 === 'bbxxww' && record.testField2 === 'ccccee';
+    };
+    return CustomFilter2;
+}(CsvReader_1.Filter));
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var result1, result2;
     return __generator(this, function (_a) {
-        streamCsvWriter.writeLines(10000);
-        console.log('done');
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, streamCsvWriter.writeLines(10000)];
+            case 1:
+                _a.sent();
+                streamCsvReader.setFilter(new CustomFilter1());
+                return [4 /*yield*/, streamCsvReader.readDataFromFile()];
+            case 2:
+                result1 = _a.sent();
+                streamCsvReader.setFilter(new CustomFilter2());
+                return [4 /*yield*/, streamCsvReader.readDataFromFile()];
+            case 3:
+                result2 = _a.sent();
+                console.log('result1', result1);
+                console.log('result2', result2);
+                console.log('done');
+                return [2 /*return*/];
+        }
     });
 }); };
-var a = Number;
 main();
